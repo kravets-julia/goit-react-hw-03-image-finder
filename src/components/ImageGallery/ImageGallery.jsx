@@ -1,11 +1,12 @@
 import { Component } from 'react';
-import css from '../../components/ImageGallery/ImageGallery.module.css';
-import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import PropTypes from 'prop-types';
+import { ImageGalleryItem } from 'components/ImageGalleryItem/ImageGalleryItem';
 import Modal from 'components/Modal/Modal';
 import { LoadMoreBtn } from 'components/Button/Button';
 import { Loader } from 'components/Loader/Loader';
+import css from '../../components/ImageGallery/ImageGallery.module.css';
 
 export default class ImageGallery extends Component {
   state = {
@@ -133,3 +134,7 @@ export default class ImageGallery extends Component {
     }
   }
 }
+
+ImageGallery.propTypes = {
+  searchName: PropTypes.string.isRequired,
+};

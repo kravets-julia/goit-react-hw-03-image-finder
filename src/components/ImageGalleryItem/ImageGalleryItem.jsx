@@ -1,4 +1,4 @@
-// import { Modal } from 'components/Modal/Modal';
+import PropTypes from 'prop-types';
 import css from '../../components/ImageGalleryItem/ImageGalleryItem.module.css';
 
 export const ImageGalleryItem = ({ img }) => {
@@ -16,4 +16,8 @@ export const ImageGalleryItem = ({ img }) => {
       ))}
     </>
   );
+};
+
+ImageGalleryItem.propTypes = {
+  img: PropTypes.array.isRequired,
 };
