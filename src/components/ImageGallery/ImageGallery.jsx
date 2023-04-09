@@ -35,9 +35,13 @@ export default class ImageGallery extends Component {
           if (totalHits === 0) {
             this.setState({ status: 'resolved', img: [] });
             return toast.error(`No found image ${this.props.searchName}`);
-
             // console.log(`No found image ${this.props.searchName}`);
           }
+          if (hits.length < 12) {
+            this.setState({ status: 'resolved' });
+            toast.info('No more image');
+          }
+
           this.setState({ img: hits, status: 'resolved' });
         })
         .catch(error => {
@@ -64,10 +68,10 @@ export default class ImageGallery extends Component {
         .then(res => res.json())
 
         .then(({ hits, totalHits }) => {
-          if (hits.length <= 12) {
-            this.setState({ status: 'resolved' });
-            return toast.info('No more image');
-          }
+          // if (hits.length < 12) {
+          //   this.setState({ status: 'resolved' });
+          //   toast.info('No more image');
+          // }
 
           this.setState(prevState => ({
             img: [...prevState.img, ...hits],
@@ -106,12 +110,24 @@ export default class ImageGallery extends Component {
       return <div>Error...</div>;
     }
     if (this.state.status === 'resolved') {
-      //   console.log(this.state.img.length);
+      // console.log(this.state.img.length);
+      // console.log(this.state.pageNumber);
       return (
         <>
           {this.state.img.length > 0 && !this.state.showModal && (
             <ul className={css.ImageGallery} onClick={e => this.onImgClick(e)}>
-              <ImageGalleryItem img={this.state.img} modal={this.toggleModal} />
+              {this.state.img.map(img => (
+                // <ImageGalleryItem
+                //   img={this.state.img}
+                //   modal={this.toggleModal}
+                // />
+                <ImageGalleryItem
+                  key={img.id}
+                  webformatURL={img.webformatURL}
+                  id={img.id}
+                  tags={img.tags}
+                />
+              ))}
             </ul>
           )}
           {this.state.img.length > 0 && this.state.showModal && (
@@ -126,7 +142,7 @@ export default class ImageGallery extends Component {
             />
           )}
           {/* {this.state.img.length <= 12 && toast.info('No more image')} */}
-          {this.state.img.length >= 12 && (
+          {this.state.img.length - this.state.pageNumber * 12 >= 0 && (
             <LoadMoreBtn loadMore={this.handleIncrement} />
           )}
         </>
