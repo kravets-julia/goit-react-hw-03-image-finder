@@ -73,10 +73,9 @@ export default class ImageGallery extends Component {
         .then(res => res.json())
 
         .then(({ hits }) => {
-          // if (hits.length < 12) {
-          // this.setState({ status: 'resolved' });
-          // toast.info('No more image');
-          // }
+          if (hits.length < 12) {
+            toast.info('No more image');
+          }
           const arr = hits.map(({ id, tags, webformatURL, largeImageURL }) => ({
             id,
             tags,
