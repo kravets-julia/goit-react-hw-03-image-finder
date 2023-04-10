@@ -30,9 +30,8 @@ export default class Searchbar extends Component {
           <button type="submit" className={css.SearchForm__button}>
             <span className={css.SearchForm__button__label}>Search</span>
             <ImSearch />
-            {/* Search */}
           </button>
-          {/* <lable className={css.SearchForm__button__label}> */}
+
           <input
             autoComplete="off"
             autoFocus
@@ -43,7 +42,6 @@ export default class Searchbar extends Component {
             value={this.state.searchName}
             onChange={this.handleNameChange}
           />
-          {/* </lable> */}
         </form>
       </header>
     );

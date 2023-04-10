@@ -21,7 +21,7 @@ export default class ImageGallery extends Component {
   componentDidUpdate(prevProps, prevState) {
     //  Змінився запит
     if (prevProps.searchName !== this.props.searchName) {
-      this.setState({ status: 'pending' });
+      this.setState({ status: 'pending', pageNumber: 1, img: [] });
 
       const BASE_URL = 'https://pixabay.com/api/';
       const API_KEY = '33829392-49d1eab567acddcf43bdfe9f1';
@@ -41,8 +41,13 @@ export default class ImageGallery extends Component {
             this.setState({ status: 'resolved' });
             toast.info('No more image');
           }
-
-          this.setState({ img: hits, status: 'resolved' });
+          const arr = hits.map(({ id, tags, webformatURL, largeImageURL }) => ({
+            id,
+            tags,
+            webformatURL,
+            largeImageURL,
+          }));
+          this.setState({ img: arr, status: 'resolved' });
         })
         .catch(error => {
           this.setState({ img: [], error: true, status: 'rejected' });
@@ -67,14 +72,19 @@ export default class ImageGallery extends Component {
       )
         .then(res => res.json())
 
-        .then(({ hits, totalHits }) => {
+        .then(({ hits }) => {
           // if (hits.length < 12) {
-          //   this.setState({ status: 'resolved' });
-          //   toast.info('No more image');
+          // this.setState({ status: 'resolved' });
+          // toast.info('No more image');
           // }
-
+          const arr = hits.map(({ id, tags, webformatURL, largeImageURL }) => ({
+            id,
+            tags,
+            webformatURL,
+            largeImageURL,
+          }));
           this.setState(prevState => ({
-            img: [...prevState.img, ...hits],
+            img: [...prevState.img, ...arr],
             status: 'resolved',
           }));
         })
@@ -110,17 +120,14 @@ export default class ImageGallery extends Component {
       return <div>Error...</div>;
     }
     if (this.state.status === 'resolved') {
-      // console.log(this.state.img.length);
-      // console.log(this.state.pageNumber);
+      console.log(this.state.img.length);
+      console.log(this.state.pageNumber);
+
       return (
         <>
           {this.state.img.length > 0 && !this.state.showModal && (
             <ul className={css.ImageGallery} onClick={e => this.onImgClick(e)}>
               {this.state.img.map(img => (
-                // <ImageGalleryItem
-                //   img={this.state.img}
-                //   modal={this.toggleModal}
-                // />
                 <ImageGalleryItem
                   key={img.id}
                   webformatURL={img.webformatURL}
@@ -141,7 +148,7 @@ export default class ImageGallery extends Component {
               onClose={this.toggleModal}
             />
           )}
-          {/* {this.state.img.length <= 12 && toast.info('No more image')} */}
+
           {this.state.img.length - this.state.pageNumber * 12 >= 0 && (
             <LoadMoreBtn loadMore={this.handleIncrement} />
           )}
