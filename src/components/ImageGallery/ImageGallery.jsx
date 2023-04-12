@@ -109,51 +109,34 @@ export default class ImageGallery extends Component {
   };
 
   render() {
-    if (this.state.status === 'idle') {
-      return <div>Заповніть поле пошуку</div>;
-    }
-    if (this.state.status === 'pending') {
-      return <Loader />;
-    }
-    if (this.state.status === 'rejected') {
-      return <div>Error...</div>;
-    }
-    if (this.state.status === 'resolved') {
-      console.log(this.state.img.length);
-      console.log(this.state.pageNumber);
+    // console.log(this.state.img.length);
+    // console.log(this.state.pageNumber);
 
-      return (
-        <>
-          {this.state.img.length > 0 && !this.state.showModal && (
-            <ul className={css.ImageGallery} onClick={e => this.onImgClick(e)}>
-              {this.state.img.map(img => (
-                <ImageGalleryItem
-                  key={img.id}
-                  webformatURL={img.webformatURL}
-                  id={img.id}
-                  tags={img.tags}
-                />
-              ))}
-            </ul>
-          )}
-          {this.state.img.length > 0 && this.state.showModal && (
-            <ul className={css.ImageGallery}>
-              <ImageGalleryItem img={this.state.img} modal={this.toggleModal} />
-            </ul>
-          )}
-          {this.state.showModal && (
-            <Modal
-              largeImg={this.state.largeImgURL}
-              onClose={this.toggleModal}
-            />
-          )}
+    return (
+      <>
+        {/* {this.state.status === 'idle' && <div>Заповніть поле пошуку</div>} */}
+        {this.state.img.length > 0 && !this.state.showModal && (
+          <ul className={css.ImageGallery} onClick={e => this.onImgClick(e)}>
+            {this.state.img.map(img => (
+              <ImageGalleryItem
+                key={img.id}
+                webformatURL={img.webformatURL}
+                id={img.id}
+                tags={img.tags}
+              />
+            ))}
+          </ul>
+        )}
 
-          {this.state.img.length - this.state.pageNumber * 12 >= 0 && (
-            <LoadMoreBtn loadMore={this.handleIncrement} />
-          )}
-        </>
-      );
-    }
+        {this.state.showModal && (
+          <Modal largeImg={this.state.largeImgURL} onClose={this.toggleModal} />
+        )}
+
+        {this.state.img.length - this.state.pageNumber * 12 >= 0 && (
+          <LoadMoreBtn loadMore={this.handleIncrement} />
+        )}
+      </>
+    );
   }
 }
 
