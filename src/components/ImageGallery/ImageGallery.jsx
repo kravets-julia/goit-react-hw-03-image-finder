@@ -116,16 +116,20 @@ export default class ImageGallery extends Component {
       <>
         {/* {this.state.status === 'idle' && <div>Заповніть поле пошуку</div>} */}
         {this.state.img.length > 0 && !this.state.showModal && (
-          <ul className={css.ImageGallery} onClick={e => this.onImgClick(e)}>
-            {this.state.img.map(img => (
-              <ImageGalleryItem
-                key={img.id}
-                webformatURL={img.webformatURL}
-                id={img.id}
-                tags={img.tags}
-              />
-            ))}
-          </ul>
+          <>
+            <ul className={css.ImageGallery} onClick={e => this.onImgClick(e)}>
+              {this.state.img.map(img => (
+                <ImageGalleryItem
+                  key={img.id}
+                  webformatURL={img.webformatURL}
+                  id={img.id}
+                  tags={img.tags}
+                />
+              ))}
+            </ul>
+            {this.state.status === 'pending' && <Loader />}
+            {this.state.status === 'rejected' && <div>Error</div>}
+          </>
         )}
 
         {this.state.showModal && (
